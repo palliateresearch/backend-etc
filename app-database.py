@@ -2,9 +2,10 @@
 from flask import Flask, render_template, request, redirect, jsonify, session, url_for
 import os
 import uuid
-from sqlalchemy import create_engine, Column, String, Integer, BigInteger, JSON
+from sqlalchemy import create_engine, Column, String, Integer, BigInteger, JSON, Boolean, MetaData
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
+from sqlalchemy.dialects.mysql import LONGTEXT
 
 
 
@@ -14,7 +15,8 @@ app.secret_key = os.urandom(24)
 
 #Database stuff
 engine = create_engine('mysql+pymysql://sql9632805:Tq1nniKxiS@sql9.freemysqlhosting.net:3306/sql9632805')
-Base = declarative_base(bind=engine)
+#Base = declarative_base(bind=engine)
+Base = declarative_base()
 Session = sessionmaker(bind=engine)
 session = Session()
 
@@ -26,18 +28,31 @@ class CommunityDatabase(Base):
     TimezoneCode = Column(String(3))
     DailyWattageGeneration = Column(JSON)
     RegisteredUsers = Column(JSON)
+    CBadgesComplete = Column(JSON)
+    CBadgesInProgress = Column(JSON)
+    CBadgesDone = Column(JSON)
 
 class UserDatabase(Base):
     __tablename__ = 'user'
     UserID = Column(String(36), primary_key=True)
-    UserName = Column(String(255))
+    Username = Column(String(255))
     LifetimeWattageGeneration = Column(BigInteger)
-    TimezoneCode = Column(String(3))
-    DailyWattageGeneration = Column(JSON)
-    RegisteredUsers = Column(JSON)
+    DailyWattageGeneration = Column(JSON)  # Use LONGTEXT instead of JSON
+    IsParent = Column(Boolean)
+    ChildrenList = Column(JSON)  # Use LONGTEXT instead of JSON
+    ParkID = Column(String(36))
+    Password = Column(String(255))
+    BadgesComplete = Column(JSON)  # Use LONGTEXT instead of JSON
+    BadgesInProgress = Column(JSON)  # Use LONGTEXT instead of JSON
+    BadgesDone = Column(JSON)  # Use LONGTEXT instead of JSON
+
+    # CBadge = Community Badge
+    # Badge = User Badge
 
 # Create the table if it doesn't exist
-Base.metadata.create_all()
+#Base.metadata.create_all()
+metadata = MetaData()
+Base.metadata.create_all(bind=engine)
 
 # Generate a random UUID for ParkID
 # how 2 add uuid:  park_id = str(uuid.uuid4())
