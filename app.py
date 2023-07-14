@@ -1,6 +1,9 @@
 #import Flask, session, redirect, render_template
 from flask import Flask, render_template, request, redirect, jsonify, session, url_for
 import os
+import sqlite3
+
+
 
 # Create a Flask instance
 app = Flask(__name__)
@@ -19,48 +22,50 @@ def index():  # put application's code here
         #render the template if not logged in. Username is not shown
         return render_template('index.html')
 
-@app.route('/login', methods=['GET', 'POST'])
+
+# ----------------------------------------------
+# ------------ A P I  R O U T E S --------------
+# ----------------------------------------------
+
+
+@app.route('/api/post/register', methods=['GET', 'POST'])
+def register():
+    if request.method == 'POST':
+        #depends on what login method we are using (apple oauth or our custom login method)
+        return jsonify({"status": 202})
+
+    else:
+        return jsonify({"status": 405})
+
+@app.route('api/login', methods=['GET', 'POST'])
 def login():
-    if "username" in session:
-        return redirect('/home')
-    elif request.method == "POST":
-        username = request.form["username"]
-        password = request.form["password"]
-        print("recieved login request")
-        if username == "nishka":
-            if password == "1":
-                print("logged in")
-                session["username"] = username
-                return redirect('/home')
-        else:
-            return render_template("login.html", error="Incorrect username or password")
+    #depends on what login method we are using (apple oauth or our custom login method)
+    return jsonify({"status": 418})
+
+@app.route('api/post/registercommunity', methods=['GET', 'POST'])
+def registercommunity():
+    if request.method == 'POST':
+        print("sex")
     else:
-        print("Rendering login page")
-        return render_template("login.html")
+        return jsonify({"status": 405})
+    return jsonify({"status": 418})
 
-@app.route('/new')
-def makeaccount():
-    if "username" in session:
-        return redirect('/home')
-    else:
-        return render_template('makeaccount.html')
+@app.route('api/get/<userID>/info', methods=['GET', 'POST'])
+def user():
+    if request.method == 'GET':
+        return jsonify({"status": 418})
 
-
-@app.route('/logout', methods=['GET', 'POST'])
-def logout():
-    if "username" in session:
-        session.pop("username", None)
-        return redirect('/')
-    else:
-        return redirect('/')
+@app.route('api/get/community/<communityID>/info', methods=['GET', 'POST'])
+def community():
+    if request.method == 'GET':
+        return jsonify({"status": 418})
 
 
-@app.route('/home')
-def home():
-    if "username" in session:
-        return render_template('home.html')
-    else:
-        return redirect('/login')
+
 
 if __name__ == '__main__':
     app.run()
+
+
+
+
