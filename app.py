@@ -1,4 +1,7 @@
 from flask import *
+from datetime import *
+
+
 app = Flask(__name__)
 
 data_received = {}
@@ -6,15 +9,17 @@ energy = float(0.0)  # Total energy in Watt Hours
 totalEnergy = float(0.0)
 
 
+
 @app.route('/arduino', methods=['POST'])
 def receive_data():
-    global data_received, totalEnergy
+    global data_received, totalEnergy, internal_data
     integer = request.json.get('integer')
     parkName = "Apple Park"
 
-
-    energy = int(integer) / 3600.0
+    wattsecond = float(integer)
+    energy = float(integer) / 3600.0
     totalEnergy += energy
+    totalEnergy = round(totalEnergy, 2)
 
     # Check that unique_id is 32 characters long
     #if len(unique_id) != 32:
@@ -22,6 +27,10 @@ def receive_data():
 
     data_received = {
         #'energy': energy,
+        'totalEnergy': totalEnergy
+    }
+    internal_data = {
+        'wattsecond': wattsecond,
         'totalEnergy': totalEnergy,
     }
 
@@ -29,18 +38,7 @@ def receive_data():
 
 @app.route('/lookie')
 def display_data():
-
-    return render_template_string('''
-        <h1>Device Debugger:</h1>
-        <ul>
-            <li>Device: {{ unique_id }}</li>
-            <li>Timestamp: {{ timestamp }}</li>
-            <li>Integer: {{ integer }}</li>
-            <li>Energy: {{ energy }}</li>
-            <li>Energy (Total wH): {{ totalEnergy }}</li>
-            
-        </ul>
-        ''', **data_received)
+    return render_template('lookie.html', **internal_data)
 
 
 @app.route('/get', methods=['GET'])
@@ -58,7 +56,7 @@ def g28hgf30rghhsgf0h0h9g():
     #             <li>JSON: {{ wap }}</li>
     #         </ul>
     #         ''', **JSONData)
-    return jsonify(JSONData)
+    return jsonify(data_received)
 
 if __name__ == '__main__':
     app.run(debug=True)
@@ -66,3 +64,5 @@ if __name__ == '__main__':
 # gunicorn -b 172.16.252.187:5000 app:app
 #10.113.57.174
 #gunicorn -b 172.16.91.144:5000 app:app
+#169.254.204.64
+#gunicorn -b 192.168.5.167:5000 app:app

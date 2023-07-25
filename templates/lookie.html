@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Device Debugger</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        header {
+            background-color: #333;
+            color: #fff;
+            padding: 10px 0;
+            overflow: hidden;
+        }
+        header img {
+            width: 50px;
+            height: 50px;
+            margin-left: 20px;
+            float: left;
+        }
+        header h1 {
+            margin-left: 80px;
+        }
+        .data {
+            margin: 20px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <img src="{{ url_for('static', filename='shark_logo.png') }}" alt="Shark logo">
+        <h1>Team Palliate  Debugging Tool</h1>
+    </header>
+    <div class="data">
+        <ul>
+            <li>LocalArea: {{ unique_id }}</li>
+            <li>Energy (wS): {{ wattsecond }}</li>
+            <li>Energy (Total wH): {{ totalEnergy }}</li>
+        </ul>
+    </div>
+</body>
+</html>
