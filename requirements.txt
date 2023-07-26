@@ -1,11 +1,1 @@
-import Flask, session, redirect, render_template
-from sqlalchemy import create_engine, Column, String, Integer, BigInteger, JSON, Boolean, MetaData
-from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy.orm import sessionmaker
-from flask_sqlalchemy import SQLAlchemy
-from flask import Flask, render_template, request, redirect, jsonify, session, url_for
-import uuid
-import os
-import sqlite3
-import bcrypt
-Flask~=2.3.2
+Flask
