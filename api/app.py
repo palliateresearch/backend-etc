@@ -5,7 +5,9 @@ from datetime import *
 app = Flask(__name__)
 
 data_received = {}
-internal_data = {}
+internal_data = {
+    'wattsecond': 1,
+    'totalEnergy': 1,}
 energy = float(0.0)  # Total energy in Watt Hours
 totalEnergy = float(0.0)
 
