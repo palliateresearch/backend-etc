@@ -68,4 +68,4 @@ if __name__ == '__main__':
 #10.113.57.174
 #gunicorn -b 172.16.91.144:5000 app:app
 #169.254.204.64
-#gunicorn -b 192.168.5.167:5000 app:app
+#gunicorn -b 172.16.206.71:5000 app:app
