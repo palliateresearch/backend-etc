@@ -49,6 +49,20 @@ def g28hgf30rghhsgf0h0h9g():
     global data_received
     JSONData = jsonify(data_received)
 
+@app.route('/reset')
+def reset():
+    global data_received, totalEnergy, internal_data
+    totalEnergy = 0.0
+    wattsecond = 0.0
+    data_received = {
+        #'energy': energy,
+        'totalEnergy': totalEnergy
+    }
+    internal_data = {
+        'wattsecond': wattsecond,
+        'totalEnergy': totalEnergy,
+    }
+    return redirect(url_for('display_data'))
 
 
 
@@ -62,10 +76,11 @@ def g28hgf30rghhsgf0h0h9g():
     return jsonify(data_received)
 
 if __name__ == '__main__':
+    app.run(host='127.0.0.1')
     app.run(debug=True)
 
 # gunicorn -b 172.16.252.187:5000 app:app
 #10.113.57.174
 #gunicorn -b 172.16.91.144:5000 app:app
 #169.254.204.64
-#gunicorn -b 172.16.206.71:5000 app:app
+#gunicorn -b 172.20.10.10:5000 app:app
